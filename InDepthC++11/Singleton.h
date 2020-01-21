@@ -1,12 +1,12 @@
-#pragma once
+ï»¿#pragma once
 /*
-1. C++11 ¸ÄÉÆµ¥ÀıÄ£Ê½
-	Ôö¼ÓÁË¿É±ä²ÎÊıÄ£°å
+1. C++11 æ”¹å–„å•ä¾‹æ¨¡å¼
+	å¢åŠ äº†å¯å˜å‚æ•°æ¨¡æ¿
 */
 template <typename T>
 class Singleton {
 public:
-	//Ã»ÓĞÊ¹ÓÃC++¿É±äº¯Êı²ÎÊıµÄ»¯£¬ÔòĞèÒªÖØ¸´¶¨Òå²»Í¬ÀàµÄInstance
+	//æ²¡æœ‰ä½¿ç”¨C++å¯å˜å‡½æ•°å‚æ•°çš„åŒ–ï¼Œåˆ™éœ€è¦é‡å¤å®šä¹‰ä¸åŒç±»çš„Instance
 #if 0
 	static T* Instance() {
 		if (m_pInstance == nullptr) {
@@ -26,7 +26,7 @@ public:
 	template<typename... Args>
 	static T* Instance(Args&&... args) {
 		if (m_pInstance == nullptr) {
-			//ÍêÃÀ×ª·¢
+			//å®Œç¾è½¬å‘
 			m_pInstance = new T(std::forward<Args>(args)...);
 		}
 		return m_pInstance;
