@@ -1,4 +1,6 @@
 ﻿#include <iostream>
+#include <vector>
+
 #include "Singleton.h"
 #include "Observer.h"
 
@@ -67,21 +69,28 @@ int main() {
 	std::cout << "==========================================" << std::endl;
 	
 	Events<std::function<void(int, int)> > myevent;
+	std::vector<int> keyVec;
 	
-	auto key = myevent.Connect(print);
+	keyVec.emplace_back(myevent.Connect(print));
 	stA t;
 	auto lambdaKey = myevent.Connect([&t](int a, int b) { 
 		t.a = a; t.b = b; 
 		std::cout << a << ", " << b << std::endl;
 	});
 
+	keyVec.emplace_back(lambdaKey);
+
 	std::function<void(int, int)> f = std::bind(&stA::print, &t, std::placeholders::_1, std::placeholders::_2);
-	myevent.Connect(f);
+	keyVec.emplace_back(myevent.Connect(f));
 
 	int a = 1;
 	int b = 2;
 	myevent.Notify(a, b);
 
+	for (auto &it : keyVec) {
+		std::cout << it << std::endl;
+		myevent.Disconnect(it);
+	}
 
 
 	getchar();
