@@ -3,7 +3,7 @@
 
 #include "Singleton.h"
 #include "Observer.h"
-
+#include "Vistor.h"
 struct A {
 	A() {
 		std::cout << "A()" << std::endl;
@@ -58,6 +58,27 @@ void print(int a, int b) {
 }
 
 
+//void TestVisitor() {
+//	ConcreteVisitor v;
+//	std::unique_ptr<Element> emt1(new ConcreteElement1());
+//	std::unique_ptr<Element> emt2(new ConcreteElement2());
+//
+//	emt1->Accept(v);
+//	emt2->Accept(v);
+//}
+
+void TestVisitor1() {
+	PrintVisitor vis;
+	stVA a;
+	stVB b;
+	a.Val = 8.90;
+	b.Val = 8;
+	Base* base = &a;
+	base->Accept(vis);
+	base = &b;
+	base->Accept(vis);
+}
+
 int main() {
 	Singleton<A>::Instance();
 	Singleton<B>::Instance(1);
@@ -91,6 +112,9 @@ int main() {
 		std::cout << it << std::endl;
 		myevent.Disconnect(it);
 	}
+	std::cout << "==========================================" << std::endl;
+
+	TestVisitor1();
 
 
 	getchar();
