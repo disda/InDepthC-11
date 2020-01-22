@@ -4,6 +4,9 @@
 #include "Singleton.h"
 #include "Observer.h"
 #include "Vistor.h"
+#include "SimpleCommand.h"
+#include "ObjectPool.h"
+
 struct A {
 	A() {
 		std::cout << "A()" << std::endl;
@@ -79,6 +82,82 @@ void TestVisitor1() {
 	base->Accept(vis);
 }
 
+
+int add_one(int n) {
+	return n + 1;
+}
+
+void TestWrap() {
+	CommCommand<int> cmd;
+	cmd.Wrap(add_one, 0);
+	cmd.Wrap(
+		[](int n) {
+		return n + 1;
+	}, 1);
+
+	//cmd.Wrap(bloop);
+	//
+	//cmd.Wrap(bloop, 4);
+
+	STA t = { 10 };
+	int x = 3;
+
+	cmd.Wrap(&STA::triple0, &t);
+	cmd.Wrap(&STA::triple, &t, x);
+	cmd.Wrap(&STA::triple, &t, 3);
+
+	cmd.Wrap(&STA::triple2, &t, 3);
+
+	auto r = cmd.Excecute();
+
+	CommCommand<> cmd1;
+}
+
+
+
+struct BigObject {
+	BigObject() {}
+	BigObject(int a) {}
+	BigObject(const int& a, const int& b) {};
+	void Print(const std::string& str) {
+		std::cout << str << std::endl;
+	}
+};
+
+void Print(shared_ptr<BigObject>p ,const std::string& str) {
+	if (p != nullptr) {
+		p->Print(str);
+	}
+}
+
+void TestObjectPool() {
+	ObjectPool<BigObject> pool;
+	pool.Init(2);
+
+	{
+		auto p = pool.Get();
+		Print(p, "p");
+		auto p2 = pool.Get();
+		Print(p2, "p2");
+	}
+
+	auto p = pool.Get();
+	auto p2 = pool.Get();
+
+	Print(p, "p");
+	Print(p2, "p2");
+
+	pool.Init(2, 1);
+	auto p4 = pool.Get<int>();
+
+	Print(p4, "p4");
+	pool.Init(2, 1, 2);
+	auto p5 = pool.Get<int,int>();
+	Print(p5, "p5");
+}
+
+
+
 int main() {
 	Singleton<A>::Instance();
 	Singleton<B>::Instance(1);
@@ -115,8 +194,11 @@ int main() {
 	std::cout << "==========================================" << std::endl;
 
 	TestVisitor1();
+	std::cout << "==========================================" << std::endl;
 
-
+	TestWrap();
+	std::cout << "==========================================" << std::endl;
+	TestObjectPool();
 	getchar();
 	return 0;
 }
