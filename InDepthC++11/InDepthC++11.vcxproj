@@ -118,11 +118,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Atomic.h" />
+    <ClInclude Include="CallOnce.h" />
+    <ClInclude Include="NonCopyable.h" />
+    <ClInclude Include="ObjectPool.h" />
+    <ClInclude Include="Observer.h" />
+    <ClInclude Include="SimpleCommand.h" />
     <ClInclude Include="Singleton.h" />
+    <ClInclude Include="SyncQueue.h" />
+    <ClInclude Include="testThread.h" />
+    <ClInclude Include="Vistor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="NonCopyable.cpp" />
+    <ClCompile Include="ObjectPool.cpp" />
+    <ClCompile Include="Observer.cpp" />
+    <ClCompile Include="SimpleCommand.cpp" />
     <ClCompile Include="Singleton.cpp" />
+    <ClCompile Include="Vistor.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

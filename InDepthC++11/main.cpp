@@ -8,7 +8,7 @@
 #include "Vistor.h"
 #include "SimpleCommand.h"
 #include "ObjectPool.h"
-
+#include "CallOnce.h"
 #include "testThread.h"
 struct A {
 	A() {
@@ -254,7 +254,7 @@ int main() {
 }
 #endif
 
-
+#if 0
 int main() {
 	std::thread t1(funcTextMutex);
 	std::thread t2(funcTextMutex);
@@ -269,5 +269,17 @@ int main() {
 
 	t4.join();
 	t5.join();
+	getchar();
+}
+#endif
+
+int main() {
+	std::thread t1(do_once);
+	std::thread t2(do_once);
+	std::thread t3(do_once);
+
+	t1.join();
+	t2.join();
+	t3.join();
 	getchar();
 }
