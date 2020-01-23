@@ -1,5 +1,7 @@
 ﻿#include <iostream>
 #include <vector>
+#include <thread>
+#include <memory>
 
 #include "Singleton.h"
 #include "Observer.h"
@@ -7,6 +9,7 @@
 #include "SimpleCommand.h"
 #include "ObjectPool.h"
 
+#include "testThread.h"
 struct A {
 	A() {
 		std::cout << "A()" << std::endl;
@@ -156,8 +159,55 @@ void TestObjectPool() {
 	Print(p5, "p5");
 }
 
+/*
+1. std::thread出了作用域将会析构，如果这时线程函数还没有执行完则会发生错误，因此，需要保证线程函数的
+2. 线程不能复制，但可以移动 std::thread t(func); std::thread t1(std::move(t)); 线程移动后，线程对象不代表任何线程
+3. 注意点：可以通过join方式阻塞线程的方式等待线程函数执行完，或者通过detach，让线程在后台执行完。
+4. 可以把线程对象保存到一个容器中，以保证线程对象的生命周期。
+*/
+
+void func(int i, double d, const  std::string& s) {
+	std::cout << i << ", " << d << ", " << s << std::endl;
+}
+
+void func1() {
+	std::cout << "test thread" << std::endl;
+}
+
+std::vector<std::thread> g_list;
+std::vector<std::shared_ptr<std::thread>> g_list2;
 
 
+void CreateThread() {
+	std::thread t(func1);
+	g_list.push_back(std::move(t));
+	g_list2.push_back(std::make_shared<std::thread>(func1));
+}
+
+//测试创建线程，并阻塞等待线程
+#if 0
+int main() {
+	//可变函数参数模板
+	std::thread t(func, 1, 2, "test");
+	t.join();
+
+	CreateThread();
+	for (auto& thread : g_list) {
+		thread.join();
+	}
+
+	for (auto& thread : g_list2) {
+		thread->join();
+	}
+	getchar();
+	return 0;
+}
+#endif
+
+
+
+//设计模式的相关代码
+#if 0
 int main() {
 	Singleton<A>::Instance();
 	Singleton<B>::Instance(1);
@@ -201,4 +251,17 @@ int main() {
 	TestObjectPool();
 	getchar();
 	return 0;
+}
+#endif
+
+
+int main() {
+	std::thread t1(funcTextMutex);
+	std::thread t2(funcTextMutex);
+	std::thread t3(funcTextMutex);
+
+	t1.join();
+	t2.join();
+	t3.join();
+	getchar();
 }
