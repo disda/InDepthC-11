@@ -10,6 +10,7 @@
 #include "ObjectPool.h"
 #include "CallOnce.h"
 #include "testThread.h"
+#include "Promise.h"
 struct A {
 	A() {
 		std::cout << "A()" << std::endl;
@@ -273,6 +274,8 @@ int main() {
 }
 #endif
 
+#if 0
+//test std::call_once
 int main() {
 	std::thread t1(do_once);
 	std::thread t2(do_once);
@@ -281,5 +284,13 @@ int main() {
 	t1.join();
 	t2.join();
 	t3.join();
+	getchar();
+}
+#endif
+
+int main() {
+	TestPromise();
+	std::cout << "================================================================" << std::endl;
+	TestAsync();
 	getchar();
 }
