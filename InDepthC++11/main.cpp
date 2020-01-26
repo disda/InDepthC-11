@@ -11,6 +11,7 @@
 #include "CallOnce.h"
 #include "testThread.h"
 #include "Promise.h"
+#include "DThreadPool.h"
 struct A {
 	A() {
 		std::cout << "A()" << std::endl;
@@ -288,9 +289,16 @@ int main() {
 }
 #endif
 
+#if 0
 int main() {
 	TestPromise();
 	std::cout << "================================================================" << std::endl;
 	TestAsync();
 	getchar();
+}
+
+#endif
+
+int main() {
+	TestThreadPool();
 }
