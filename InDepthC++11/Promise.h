@@ -73,5 +73,5 @@ void TestAsync() {
 		}
 	} while (status != std::future_status::ready);
 
-	std::cout << "result is" << future.get() << std::endl;
+	std::cout << "result is " << future.get() << std::endl;
 }

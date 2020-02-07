@@ -299,6 +299,78 @@ int main() {
 
 #endif
 
+#if 0
 int main() {
 	TestThreadPool();
+}
+#endif
+
+using namespace std;
+template<typename T>
+void PrintT(T& t) {
+	cout << "lvalue" << endl;
+}
+
+template<typename T>
+void PrintT(T &&t) {
+	cout << "right value" << endl;
+}
+
+template<typename T>
+void TestForward(T &&v) {
+	PrintT(v);
+	PrintT(std::forward<T>(v));
+	PrintT(std::move(v));
+}
+
+#if 0
+int main() {
+	TestForward(1);
+	int x = 1;
+	TestForward(x);
+	TestForward(std::forward<int>(x));
+	getchar();
+}
+#endif
+
+
+//test emplace_back
+
+#include <vector>
+#include <map>
+#include <string>
+#include <iostream>
+using namespace std;
+
+struct Complicated {
+	int year;
+	double country;
+	std::string name;
+
+	Complicated(int a, double b, string c) :year(a), country(b), name(c) {
+		cout << "is constructed" << endl;
+	}
+
+	Complicated(const Complicated& other) :year(other.year), country(other.country), name(std::move(other.name)) {
+		cout << "is move" << endl;
+	}
+};
+
+int main() {
+	std::map<int, Complicated> m;
+	int aInt = 4;
+	double  aDouble = 1.0;
+	std::string aString = "C++";
+	cout << "--insert--" << endl;
+
+	m.insert(std::make_pair(4, Complicated(aInt, aDouble, aString)));
+	cout << "---emplace---" << endl;
+	m.emplace(4, Complicated(aInt, aDouble, aString));
+	cout << "---emplace_back---" << endl;
+	vector<Complicated> v;
+	v.emplace_back(aInt, aDouble, aString);
+
+	cout << "---push_back---" << endl;
+	v.push_back(Complicated(aInt, aDouble, aString));
+	getchar();
 }
